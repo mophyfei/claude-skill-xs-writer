@@ -26,12 +26,15 @@ else
     git clone "$REPO_URL" "$SKILL_DIR"
 fi
 
-# 初始化 learned 目錄（不覆蓋已有內容）
+# 初始化 learned 目錄（從模板複製，不覆蓋已有內容）
 echo "[2/3] 初始化自學習目錄..."
 mkdir -p "$SKILL_DIR/learned"
-[ ! -f "$SKILL_DIR/learned/error-patterns.md" ] && echo "# 錯誤模式記錄\n\n> AI 會自動將遇到的 XS 錯誤記錄在此，避免重複犯錯。\n" > "$SKILL_DIR/learned/error-patterns.md"
-[ ! -f "$SKILL_DIR/learned/field-corrections.md" ] && echo "# 欄位名稱修正記錄\n\n> 記錄欄位名稱的常見錯誤與正確寫法。\n" > "$SKILL_DIR/learned/field-corrections.md"
-[ ! -f "$SKILL_DIR/learned/user-tips.md" ] && echo "# 用戶技巧與注意事項\n\n> 記錄用戶回報的實用技巧。\n" > "$SKILL_DIR/learned/user-tips.md"
+for f in error-patterns field-corrections user-tips; do
+    if [ ! -f "$SKILL_DIR/learned/${f}.md" ] && [ -f "$SKILL_DIR/learned/${f}.md.template" ]; then
+        cp "$SKILL_DIR/learned/${f}.md.template" "$SKILL_DIR/learned/${f}.md"
+        echo "  建立 learned/${f}.md"
+    fi
+done
 
 # 同步 xs-helper 文件
 echo "[3/3] 同步 xs-helper 參考文件..."
