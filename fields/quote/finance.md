@@ -1,27 +1,27 @@
-# Quote 財務欄位 (10) - 僅台股
+# Quote 財務欄位 (10)
 
 > 用於 `GetQuote("欄位名")` 即時報價
+> 取得最新一期財報數據
 
 | 欄位名稱 | English Code | 支援商品 | 備註 |
 |----------|-------------|---------|------|
-| 每股盈餘 | EPS | 台股 | 最近四季合計 |
-| 每股淨值 | BookValue | 台股 | 最近一季 |
-| 股東權益報酬率 | ROE | 台股 | 最近四季合計 |
-| 毛利率 | GrossMargin | 台股 | 最近一季(%) |
-| 營業利益率 | OperatingMargin | 台股 | 最近一季(%) |
-| 稅前淨利率 | PreTaxMargin | 台股 | 最近一季(%) |
-| 負債比率 | DebtRatio | 台股 | 最近一季(%) |
-| 流動比率 | CurrentRatio | 台股 | 最近一季(%) |
-| 速動比率 | QuickRatio | 台股 | 最近一季(%) |
-| 利息保障倍數 | InterestCoverage | 台股 | 最近四季合計 |
+| 每股淨值 | NetValuePerShare | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的每股淨值。 |
+| 每股營收 | OpeRevenuePerShare | 台股 香港股票 大陸股票 美(股票) | | 當期財報的「每股營業額(元)」欄位。 |
+| 每股盈餘 | CurrentEPS | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的「每股盈餘」欄位。 |
+| 毛利率 | GrossMarginRate | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的「營業毛利率」欄位。單位為％，例如營業毛利率為25%時則回傳25。 |
+| 營收年增率 | RevenueYoY | 台股 香港股票 大陸股票 美(股票) | | 最新一期營收較去年同期營收的成長率。單位為%，例如營收年增率為10%，則回傳10 |
+| 營收月份 | RevenueMonth | 台股 香港股票 大陸股票 美(股票) | | 最新一期營收的年月別。資料格式為YYYYMM的6碼數字，例如最新一期營收為202 |
+| 營收期增率 | RevenueGrowth | 台股 香港股票 大陸股票 美(股票) | | 最新一期營收較上一期營收的成長率。單位為%，例如營收期增率為10%，則回傳10。 |
+| 營益率 | OpeProfitMarginRate | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的「營業利益率」欄位。單位為％，例如營業利益率為25%時則回傳25。 |
+| 股東權益報酬率 | CurrentROE | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的「股東權益報酬率」(ROE)欄位。單位為％，例如股東權益報酬率為1 |
+| 財報期別 | FinancialStatementsTime | 台股 香港股票 大陸股票 美(股票) | | 最新一期財報的年月別。資料格式為YYYYMM的6碼數字。財報期別如果是季，則以3 |
 
 ## 使用範例
 
 ```xs
-// 取得即時報價的本益比相關數據
-eps = GetQuote("每股盈餘");
-price = GetQuote("成交");
-if eps > 0 then pe = price / eps;
+eps = GetQuote("每股盈餘");  // 或 GetQuote("CurrentEPS")
+roe = GetQuote("股東權益報酬率");  // 或 GetQuote("CurrentROE")
+opm = GetQuote("營益率");  // 或 GetQuote("OpeProfitMarginRate")
 ```
 
-> 完整欄位清單請查閱 xs-helper: ~/.cache/xs-helper/xs-helper backup/
+> 欄位名稱以 xs-helper 官方文件為準

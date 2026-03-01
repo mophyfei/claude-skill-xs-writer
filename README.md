@@ -5,8 +5,8 @@
 ## 功能特色
 
 - **四種腳本支援**：指標、交易、選股、警示腳本
-- **395 個函數索引**：內建函數 179 個 + 系統函數 216 個
-- **1,011 個欄位索引**：報價 132 + 資料 371 + 選股 508
+- **253 個常用函數索引**：內建函數 125 個 + 系統函數 128 個（完整 395 個函數可透過 xs-helper 同步取得）
+- **1,011 個欄位索引**：報價 132 + 資料 371 + 選股 508（100% 來自 xs-helper 官方文件）
 - **自學習機制**：自動記錄錯誤模式，避免重複犯錯
 - **GitHub 同步**：從 xs-helper 拉取最新函數/欄位文件
 - **精選範例**：各類腳本的實戰程式碼範例
@@ -43,6 +43,7 @@ curl -sSL https://raw.githubusercontent.com/mophyfei/claude-skill-xs-writer/main
 xs-writer/
 ├── SKILL.md              # 核心規則 + 檔案索引 + 搜尋策略
 ├── sync.sh               # 同步 xs-helper 最新文件
+├── rebuild_fields.py     # 自動重建欄位索引（由 sync.sh 調用）
 ├── install.sh            # 安裝腳本
 ├── README.md             # 本說明文件
 │
@@ -65,8 +66,8 @@ xs-writer/
 │   └── common-pitfalls.md
 │
 ├── functions/            # 函數精簡索引
-│   ├── builtin/          # 內建函數 (179)
-│   └── system/           # 系統函數 (216)
+│   ├── builtin/          # 內建函數 (125)
+│   └── system/           # 系統函數 (128)
 │
 ├── fields/               # 欄位精簡索引
 │   ├── quote/            # 報價欄位 (132)

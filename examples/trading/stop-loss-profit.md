@@ -4,22 +4,22 @@
 
 ```xs
 // 固定百分比停損
-input: stopLossPct(5, "停損百分比");
+input: _stopLossPct(5, "停損百分比");
 
-variable: entryPrice(0), maShort(0), maLong(0);
+variable: _entryPrice(0), _maShort(0), _maLong(0);
 
-maShort = Average(Close, 5);
-maLong = Average(Close, 20);
+_maShort = Average(Close, 5);
+_maLong = Average(Close, 20);
 
 // 進場
-if maShort Cross Over maLong then begin
+if _maShort Cross Over _maLong then begin
   SetPosition(1);
-  entryPrice = Close;
+  _entryPrice = Close;
 end;
 
 // 停損出場
 if GetMarketPosition = 1 then begin
-  if Close <= entryPrice * (1 - stopLossPct / 100) then
+  if Close <= _entryPrice * (1 - _stopLossPct / 100) then
     SetPosition(0);  // 停損
 end;
 ```
@@ -28,24 +28,24 @@ end;
 
 ```xs
 // 固定停損 + 固定停利
-input: stopLossPct(5, "停損%");
-input: takeProfitPct(10, "停利%");
+input: _stopLossPct(5, "停損%");
+input: _takeProfitPct(10, "停利%");
 
-variable: entryPrice(0);
+variable: _entryPrice(0);
 
 // 進場條件
 if GetMarketPosition = 0 AND Close > Average(Close, 20) then begin
   SetPosition(1);
-  entryPrice = Close;
+  _entryPrice = Close;
 end;
 
 // 停損停利
 if GetMarketPosition = 1 then begin
   // 停損
-  if Close <= entryPrice * (1 - stopLossPct / 100) then
+  if Close <= _entryPrice * (1 - _stopLossPct / 100) then
     SetPosition(0);
   // 停利
-  if Close >= entryPrice * (1 + takeProfitPct / 100) then
+  if Close >= _entryPrice * (1 + _takeProfitPct / 100) then
     SetPosition(0);
 end;
 ```
@@ -54,24 +54,24 @@ end;
 
 ```xs
 // 移動停利：跟隨最高點回撤一定比例出場
-input: trailPct(5, "回撤百分比");
+input: _trailPct(5, "回撤百分比");
 
-variable: entryPrice(0), highestSinceEntry(0);
+variable: _entryPrice(0), _highestSinceEntry(0);
 
 // 進場
 if GetMarketPosition = 0 AND Close Cross Over Average(Close, 60) then begin
   SetPosition(1);
-  entryPrice = Close;
-  highestSinceEntry = Close;
+  _entryPrice = Close;
+  _highestSinceEntry = Close;
 end;
 
 // 持倉期間追蹤最高點
 if GetMarketPosition = 1 then begin
-  if Close > highestSinceEntry then
-    highestSinceEntry = Close;
+  if Close > _highestSinceEntry then
+    _highestSinceEntry = Close;
 
   // 從最高點回撤超過設定比例則出場
-  if Close <= highestSinceEntry * (1 - trailPct / 100) then
+  if Close <= _highestSinceEntry * (1 - _trailPct / 100) then
     SetPosition(0);
 end;
 ```
@@ -80,28 +80,28 @@ end;
 
 ```xs
 // 使用ATR計算動態停損距離
-input: atrPeriod(14, "ATR週期");
-input: atrMult(2, "ATR倍數");
+input: _atrPeriod(14, "ATR週期");
+input: _atrMult(2, "ATR倍數");
 
-variable: entryPrice(0), atrStop(0);
-variable: atrVal(0);
+variable: _entryPrice(0), _atrStop(0);
+variable: _atrVal(0);
 
-atrVal = AvgTrueRange(atrPeriod);
+_atrVal = AvgTrueRange(_atrPeriod);
 
 // 進場
 if GetMarketPosition = 0 AND Close Cross Over Average(Close, 20) then begin
   SetPosition(1);
-  entryPrice = Close;
-  atrStop = Close - atrMult * atrVal;
+  _entryPrice = Close;
+  _atrStop = Close - _atrMult * _atrVal;
 end;
 
 // ATR停損：隨價格上漲調高停損點
 if GetMarketPosition = 1 then begin
-  value1 = Close - atrMult * atrVal;
-  if value1 > atrStop then
-    atrStop = value1;  // 只上調不下調
+  value1 = Close - _atrMult * _atrVal;
+  if value1 > _atrStop then
+    _atrStop = value1;  // 只上調不下調
 
-  if Close <= atrStop then
+  if Close <= _atrStop then
     SetPosition(0);
 end;
 ```
@@ -110,33 +110,33 @@ end;
 
 ```xs
 // 分批停利：達到目標分批出場
-input: tp1Pct(5, "第一目標%");
-input: tp2Pct(10, "第二目標%");
+input: _tp1Pct(5, "第一目標%");
+input: _tp2Pct(10, "第二目標%");
 
-variable: entryPrice(0), lots(4), soldFirst(false);
+variable: _entryPrice(0), _lots(4), _soldFirst(false);
 
 // 進場4口
 if GetMarketPosition = 0 AND Close Cross Over Average(Close, 20) then begin
   SetPosition(1, 4);
-  entryPrice = Close;
-  lots = 4;
-  soldFirst = false;
+  _entryPrice = Close;
+  _lots = 4;
+  _soldFirst = false;
 end;
 
 if GetMarketPosition = 1 then begin
   // 第一目標：賣2口
-  if NOT soldFirst
-     AND Close >= entryPrice * (1 + tp1Pct / 100) then begin
+  if NOT _soldFirst
+     AND Close >= _entryPrice * (1 + _tp1Pct / 100) then begin
     SetPosition(1, 2);  // 減倉至2口
-    soldFirst = true;
+    _soldFirst = true;
   end;
 
   // 第二目標：全部出場
-  if Close >= entryPrice * (1 + tp2Pct / 100) then
+  if Close >= _entryPrice * (1 + _tp2Pct / 100) then
     SetPosition(0);
 
   // 停損：全部出場
-  if Close <= entryPrice * 0.95 then
+  if Close <= _entryPrice * 0.95 then
     SetPosition(0);
 end;
 ```

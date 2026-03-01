@@ -4,36 +4,36 @@
 
 | 欄位名稱 | English Code | 支援商品 | 備註 |
 |----------|-------------|---------|------|
-| 開盤(日) | DailyOpen | 全商品 | 當日開盤價 |
-| 最高(日) | DailyHigh | 全商品 | 當日最高價 |
-| 最低(日) | DailyLow | 全商品 | 當日最低價 |
-| 成交 | Last | 全商品 | 最新成交價 |
-| 漲停價 | UpLimit | 台股/期貨 | 漲停上限價 |
-| 跌停價 | DownLimit | 台股/期貨 | 跌停下限價 |
-| 均價 | — | 全商品 | 當日均價 |
-| 昨收 | YClose | 全商品 | 昨日收盤價 |
-| 參考價 | RefPrice | 全商品 | 今日參考價 |
-| 漲跌 | Change | 全商品 | 漲跌金額 |
-| 漲幅(%) | ChangePercent | 全商品 | 漲跌幅百分比 |
-| 振幅(%) | Amplitude | 全商品 | 當日振幅 |
-| 開盤(夜) | NightOpen | 期貨 | 夜盤開盤價 |
-| 最高(夜) | NightHigh | 期貨 | 夜盤最高價 |
-| 最低(夜) | NightLow | 期貨 | 夜盤最低價 |
-| 收盤(夜) | NightClose | 期貨 | 夜盤收盤價 |
-| 上影線 | — | 全商品 | 上影線長度 |
-| 下影線 | — | 全商品 | 下影線長度 |
-| K棒實體 | — | 全商品 | K棒實體長度 |
-| 昨開 | YOpen | 全商品 | 昨日開盤價 |
-| 昨高 | YHigh | 全商品 | 昨日最高價 |
-| 昨低 | YLow | 全商品 | 昨日最低價 |
-| 前均價 | — | 全商品 | 前日均價 |
+| 一年前收盤價 | Close1Yago | 全部 | | 一年前的收盤價。可以用來計算區間漲跌幅。 |
+| 一月前收盤價 | Close1Mago | 全部 | | 一個月前的收盤價。可以用來計算區間漲跌幅。 |
+| 一週前收盤價 | Close1Wago | 全部 | | 五個交易日前的收盤價。可以用來計算區間漲跌幅。 |
+| 三月前收盤價 | Close3Mago | 全部 | | 三個月前的收盤價。可以用來計算區間漲跌幅。 |
+| 價差 | Spread | 大盤 期貨 | | 期貨價格與現貨價格之間的差額。 |
+| 內外盤 | BidAskFlag | 全部 | | 最後一筆成交價的內外盤標記。數值是1時表示是外盤成交，數值是-1時為內盤成交，如 |
+| 前一價 | PreMatch1 | 全部 | | 最新一筆成交價的前一筆成交價格。也可以使用 GetField("Close",  |
+| 前三價 | PreMatch3 | 全部 | | 最新一筆成交價的前第三筆成交價格。也可以使用 GetField("Close", |
+| 前二價 | PreMatch2 | 全部 | | 最新一筆成交價的前第二筆成交價格。也可以使用 GetField("Close", |
+| 前四價 | PreMatch4 | 全部 | | 最新一筆成交價的前第四筆成交價格。也可以使用 GetField("Close", |
+| 去年收盤價 | CloseOfLastYear | 全部 | | 去年最後一個交易日的收盤價。可以用來計算區間漲跌幅。 |
+| 參考價 | RefPrice | 台股 | | 當日的參考價。也可以使用 GetField("RefPrice", "D") 來 |
+| 均價 | AvgPrice | 台股 大盤 類股指數 台(權證) 期貨 選擇權 香港股票 大陸股票 美股 | | 當日的平均成交價。也可以使用 GetField("均價", "D") 來表示。 |
+| 基差 | Basis | 大盤 期貨 | | 現貨價格與期貨價格之間的差異。也可以使用 GetField("基差") 來表示。 |
+| 成交 | Last | 全部 | | 最新一筆成交的價格。等同於 Close 。 |
+| 振幅 | DayAmplitude | 全部 | | 當日的振幅。 |
+| 最低(日) | DailyLow | 全部 | | 當日的最低價。也可以使用 GetField("Low", "D") 來表示。 |
+| 最高(日) | DailyHigh | 全部 | | 當日的最高價。也可以使用 GetField("High", "D") 來表示。 |
+| 漲停價 | DailyUplimit | 台股 期貨 選擇權 大陸股票 | | 當日的漲停價。也可以使用 GetField("漲停價", "D") 來表示。 |
+| 漲跌幅 | PriceChangeRatio | 全部 | | 當日的漲跌幅。 |
+| 買賣價差百分比 | BidAskDiffRatio | 台股 期貨 選擇權 香港股票 大陸股票 美(股票) | | 買賣價差占買價的比例。 |
+| 跌停價 | DailyDownlimit | 台股 期貨 選擇權 大陸股票 | | 當日的跌停價。也可以使用 GetField("跌停價", "D") 來表示。 |
+| 開盤(日) | DailyOpen | 全部 | | 當日的開盤價。也可以使用 GetField("Open", "D") 來表示。 |
 
 ## 使用範例
 
 ```xs
-high = GetQuote("DailyHigh");
-low = GetQuote("DailyLow");
+high = GetQuote("最高(日)");  // 或 GetQuote("DailyHigh")
+low = GetQuote("最低(日)");  // 或 GetQuote("DailyLow")
 spread = high - low;
 ```
 
-> 完整欄位清單請查閱 xs-helper: ~/.cache/xs-helper/xs-helper backup/
+> 欄位名稱以 xs-helper 官方文件為準

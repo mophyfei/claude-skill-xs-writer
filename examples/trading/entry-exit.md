@@ -9,14 +9,14 @@
 // SetPosition(0)  = 平倉 (出場)
 
 // 均線黃金交叉買進，死亡交叉賣出
-variable: maShort(0), maLong(0);
+variable: _maShort(0), _maLong(0);
 
-maShort = Average(Close, 5);
-maLong = Average(Close, 20);
+_maShort = Average(Close, 5);
+_maLong = Average(Close, 20);
 
-if maShort Cross Over maLong then
+if _maShort Cross Over _maLong then
   SetPosition(1)    // 買進
-else if maShort Cross Under maLong then
+else if _maShort Cross Under _maLong then
   SetPosition(0);   // 平倉
 ```
 
@@ -26,15 +26,15 @@ else if maShort Cross Under maLong then
 // SetPosition 搭配口數
 // SetPosition(1, 2) = 做多2口/張
 
-variable: rsiVal(0);
+variable: _rsiVal(0);
 
-rsiVal = RSI(Close, 14);
+_rsiVal = RSI(Close, 14);
 
-if rsiVal < 30 then
+if _rsiVal < 30 then
   SetPosition(1, 2)     // RSI超賣，買2口
-else if rsiVal < 20 then
+else if _rsiVal < 20 then
   SetPosition(1, 4)     // RSI極度超賣，買4口
-else if rsiVal > 70 then
+else if _rsiVal > 70 then
   SetPosition(0);       // RSI超買，平倉
 ```
 
@@ -47,16 +47,16 @@ else if rsiVal > 70 then
 // SellShort = 做空進場
 // BuyToCover = 做空出場
 
-variable: ma20(0);
+variable: _ma20(0);
 
-ma20 = Average(Close, 20);
+_ma20 = Average(Close, 20);
 
 // 收盤站上20日均線買進
-if Close > ma20 AND Close[1] <= ma20[1] then
+if Close > _ma20 AND Close[1] <= _ma20[1] then
   Buy("均線突破");
 
 // 收盤跌破20日均線賣出
-if Close < ma20 AND Close[1] >= ma20[1] then
+if Close < _ma20 AND Close[1] >= _ma20[1] then
   Sell("均線跌破");
 ```
 
@@ -64,18 +64,18 @@ if Close < ma20 AND Close[1] >= ma20[1] then
 
 ```xs
 // 同時處理多單與空單
-variable: maShort(0), maLong(0);
+variable: _maShort(0), _maLong(0);
 
-maShort = Average(Close, 10);
-maLong = Average(Close, 30);
+_maShort = Average(Close, 10);
+_maLong = Average(Close, 30);
 
 // 多單進場
-if maShort Cross Over maLong then begin
+if _maShort Cross Over _maLong then begin
   SetPosition(1);
 end;
 
 // 空單進場
-if maShort Cross Under maLong then begin
+if _maShort Cross Under _maLong then begin
   SetPosition(-1);
 end;
 ```
@@ -84,19 +84,19 @@ end;
 
 ```xs
 // 僅在特定時間區間交易（適用期貨日內交易）
-variable: maShort(0), maLong(0);
-variable: canTrade(false);
+variable: _maShort(0), _maLong(0);
+variable: _canTrade(false);
 
-maShort = Average(Close, 5);
-maLong = Average(Close, 20);
+_maShort = Average(Close, 5);
+_maLong = Average(Close, 20);
 
 // 限制交易時間：09:00 ~ 13:00
-canTrade = Time >= 090000 AND Time <= 130000;
+_canTrade = Time >= 090000 AND Time <= 130000;
 
-if canTrade then begin
-  if maShort Cross Over maLong then
+if _canTrade then begin
+  if _maShort Cross Over _maLong then
     SetPosition(1);
-  if maShort Cross Under maLong then
+  if _maShort Cross Under _maLong then
     SetPosition(-1);
 end;
 
@@ -109,12 +109,12 @@ if Time >= 133000 then
 
 ```xs
 // 突破前高買進
-variable: prevHigh(0);
+variable: _prevHigh(0);
 
-prevHigh = Highest(High, 20)[1];  // 前20日最高（不含今日）
+_prevHigh = Highest(High, 20)[1];  // 前20日最高（不含今日）
 
 // 突破前高且量增
-if Close > prevHigh
+if Close > _prevHigh
    AND Volume > Average(Volume, 20) * 1.5 then
   SetPosition(1);
 

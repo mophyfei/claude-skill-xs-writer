@@ -1,45 +1,44 @@
-# Quote 期權欄位 (28) - 僅台(權證)/選擇權
+# Quote 期權欄位 (28)
 
-> 用於 `GetQuote("欄位名")` 即時報價，僅適用權證及選擇權
+> 用於 `GetQuote("欄位名")` 即時報價
+> 適用於期貨、選擇權商品
 
 | 欄位名稱 | English Code | 支援商品 | 備註 |
 |----------|-------------|---------|------|
-| Delta | Delta | 權證/選擇權 | 標的價格敏感度 |
-| Gamma | Gamma | 權證/選擇權 | Delta變化率 |
-| Theta | Theta | 權證/選擇權 | 時間衰減 |
-| Vega | Vega | 權證/選擇權 | 波動率敏感度 |
-| Rho | Rho | 權證/選擇權 | 利率敏感度 |
-| 隱含波動率 | ImpliedVolatility | 權證/選擇權 | IV(%) |
-| 理論價 | TheoreticalPrice | 權證/選擇權 | 模型計算理論價 |
-| 內含價值 | IntrinsicValue | 權證/選擇權 | 內在價值 |
-| 時間價值 | TimeValue | 權證/選擇權 | 時間價值 |
-| 歷史波動率 | HistoricalVolatility | 權證/選擇權 | HV(%) |
-| 槓桿比率 | Leverage | 權證 | 槓桿倍數 |
-| 實質槓桿 | EffectiveLeverage | 權證 | 有效槓桿 |
-| 溢價率 | Premium | 權證 | 溢價百分比(%) |
-| 行使比例 | ExerciseRatio | 權證 | 權證行使比例 |
-| 履約價 | StrikePrice | 權證/選擇權 | 履約價格 |
-| 剩餘天數 | DaysToExpiry | 權證/選擇權 | 到期剩餘日數 |
-| 到期日 | ExpiryDate | 權證/選擇權 | 到期日期 |
-| 未平倉量 | OpenInterest | 選擇權 | 未平倉合約數 |
-| 未平倉量變化 | OIChange | 選擇權 | 未平倉增減 |
-| 標的價格 | UnderlyingPrice | 權證/選擇權 | 標的商品價格 |
-| 買賣權別 | CallPut | 權證/選擇權 | Call/Put |
-| 發行量 | IssuedVolume | 權證 | 權證發行量 |
-| 流通在外比例 | OutstandingRatio | 權證 | 流通比(%) |
-| 發行人 | Issuer | 權證 | 發行券商 |
-| 收盤價(標的) | — | 權證/選擇權 | 標的昨收 |
-| 價內外程度 | Moneyness | 權證/選擇權 | 價內外% |
-| 結算價 | SettlementPrice | 選擇權 | 結算價格 |
-| 最後結算日 | LastSettleDate | 選擇權 | 最後結算日 |
+| Delta | Delta | 台(權證) 選擇權 | | 選擇權／權證商品的Delta值，用來衡量標的商品價格的變動幅度對商品價格的影響。 |
+| Gamma | Gamma | 台(權證) 選擇權 | | 選擇權／權證商品的Gamma值，用來衡量標的商品價格變動幅度對商品Delta的影 |
+| RHO | RHO | 台(權證) 選擇權 | | 選擇權／權證商品的RHO值，用來衡量利率的變動幅度對商品價格的影響。 |
+| Theta | Theta | 台(權證) 選擇權 | | 選擇權／權證商品的Theta值，用來衡量時間的流逝對商品價格的影響。 |
+| Vega | Vega | 台(權證) 選擇權 | | 選擇權／權證商品的Vega值，用來衡量標的商品隱含波動率的變動幅度對商品價格的影 |
+| 價內外百分比 | IOofMoney | 台(權證) 選擇權 | | 選擇權／權證商品的價內外百分比，也就是履約價與標的股現價之差。以正值表示價內，負 |
+| 內含值 | IntrinsicValue | 台(權證) 選擇權 | | 選擇權的內含值(Intrinsic value)，也就是標的股現價與履約價的差異 |
+| 到期日 | ExpiredDate | 台(權證) 期貨 選擇權 | | 商品的到期日。欄位格式為西元年月日，例如20221101。也可以使用GetSym |
+| 剩餘交易日 | RemainTradingDays | 台(權證) 期貨 選擇權 | | 距離最後交易日的可交易天數。 |
+| 剩餘日 | RemainDays | 台(權證) 期貨 選擇權 | | 距離最後交易日的天數(包括例假日)。 |
+| 執行比例 | ContractRatio | 台(權證) | | 回傳權證商品的執行比例。格式是數值，例如執行比例為0.5時則回傳0.5。也可以使 |
+| 履約價 | StrikePrice | 台(權證) 選擇權 | | 選擇權／權證商品的履約價。也可以使用 GetSymbolInfo("履約價")  |
+| 損益兩平 | BreakEvenPoint | 台(權證) | | 讓權證商品可以達到損益兩平的標的股價格。 |
+| 時間價值 | TimeValue | 台(權證) 選擇權 | | 選擇權／權證商品的時間價值(Time value)。 |
+| 最後交易日 | LastTradingDate | 台(權證) 期貨 選擇權 | | 商品的最後交易日。欄位格式為西元年月日，例如20221101。 |
+| 有效槓桿 | Leverage | 台(權證) 選擇權 | | 選擇權／權證商品的有效槓桿倍數，代表標的股每變動1%時商品價格的變動幅度。 |
+| 標的價格 | TargetPrice | 台(權證) 選擇權 | | 選擇權／權證商品的標的股目前的價格。 |
+| 標的漲跌 | TargetChange | 台(權證) 選擇權 | | 選擇權／權證商品的標的股目前的漲跌。 |
+| 標的漲跌幅 | TargetChangeRatio | 台(權證) 選擇權 | | 選擇權／權證商品的標的股目前的漲跌幅。單位是％，例如標的股上漲0.5％，則回傳0 |
+| 波動率 | Volatility | 台股 大盤 類股指數 選擇權 香港股票 | | 選擇權／權證商品標的股的歷史波動率。單位是％，例如數值如果是23.12％，則回傳 |
+| 波動率差額 | VolatilityDiff | 台(權證) 選擇權 | | 歷史波動率與隱含波動率的差異。 |
+| 溢價率百分比 | PremiumRatio | 台(權證) | | 損益兩平價格與標的價格的差異幅度比例。數值越大，代表要達到損益兩平越不容易，風險 |
+| 獲利率百分比 | Profitability | 台(權證) 選擇權 | | 理論價格與市場賣價差佔賣價的比例。 |
+| 理論價 | TheoreticalPrice | 台(權證) 選擇權 | | 選擇權／權證商品的理論價格，採用Black-Scholes模型計算。也可以使用  |
+| 買賣權成交量比率 | CPTradeRatio | 選擇權 | | 同契約所有賣權商品(PUT)的成交量／所有買權商品(CALL)的成交量。 |
+| 買賣權未平倉量比率 | CPOIRatio | 選擇權 | | 同契約所有賣權商品(PUT)的未平倉量／買權商品(CALL)的未平倉量。 |
+| 買進隱含波動率 | ImpliedVolatilityonBuy | 台(權證) 選擇權 | | 以最新的買進價格所推算出來的隱含波動率(IV)。 |
+| 賣出隱含波動率 | ImpliedVolatilityonSell | 台(權證) 選擇權 | | 以最新的賣出價格所推算出來的隱含波動率(IV)。 |
 
 ## 使用範例
 
 ```xs
-// 篩選高隱含波動率的選擇權
-iv = GetQuote("隱含波動率");
 delta = GetQuote("Delta");
-if iv > 30 AND Abs(delta) > 0.3 then ret = 1;
+iv = GetQuote("波動率");  // 或 GetQuote("Volatility")
 ```
 
-> 完整欄位清單請查閱 xs-helper: ~/.cache/xs-helper/xs-helper backup/
+> 欄位名稱以 xs-helper 官方文件為準
