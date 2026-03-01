@@ -12,47 +12,41 @@ argument-hint: [XS 腳本需求描述，例如：寫一個 RSI 指標腳本、�
 
 ---
 
-## 8 條不可違反的規則
+## 6 條不可違反的規則
 
-1. **純 XS 語法**：只能使用 XS 原生的關鍵字、函數、運算子。**禁止**混入任何其他語言的語法（如 Python、JavaScript、C、EasyLanguage 獨有語法等）。每個函數/關鍵字必須在 `functions/`、`keywords/` 或 xs-helper 文件中確認存在後才能使用，**不確定就查，不可憑記憶猜測**
+1. **純 XS 語法**：只能使用 XS 原生的關鍵字、函數、運算子。**禁止**混入任何其他語言的語法。不確定的函數先查 `functions/` 或 xs-helper，**不可憑記憶猜測**
 2. **`_` 前綴**：所有 `input` 和 `var` 名稱必須以 `_` 開頭
 3. **`=` 運算子**：判斷相等和賦值都用 `=`（XS 無 `==`）
 4. **`plot` / `PlotK` 互斥**：同一腳本中只能擇一使用
-5. **欄位名稱精確**：`GetField` / `GetQuote` 字串必須 100% 匹配 xs-helper 官方名稱（含單位後綴），**嚴禁自創或猜測欄位名**
+5. **欄位名稱只能來自白名單**：`GetField`/`GetQuote` 的欄位字串必須存在於 `fields/all-fields.txt`。**嚴禁憑記憶自創欄位**。找不到的欄位 = 不存在，必須告知用戶
 6. **先研判後撰寫**：收到需求先檢查腳本類別、頻率、商品限制，不可行則告知用戶
-7. **xs-helper 為唯一正確來源**：所有欄位名稱和函數名稱，**只能使用** xs-helper（`fields/` 索引或 `~/.cache/xs-helper/`）中明確記載的。**嚴禁憑記憶自創任何欄位或函數**。若 xs-helper 中找不到某個欄位，則該欄位**不存在**，必須告知用戶並建議替代方案
-8. **交付前強制比對**：完成程式碼後，必須將所有使用到的 `GetField`/`GetQuote` 欄位名稱，逐一與 `fields/` 索引比對確認存在。比對不通過則**禁止交付**，必須先修正
 
 ---
 
 ## 檔案索引（FILE MAP）
 
-### 撰寫前必讀
+### 規則（需要時查，不必每次預讀）
 | 需求 | 檔案 |
 |------|------|
 | 命名規範、運算子、變數宣告 | [rules/syntax-basics.md](rules/syntax-basics.md) |
 | 四種腳本類別專屬限制 | [rules/script-types.md](rules/script-types.md) |
 | 頻率限制 + 商品支援矩陣 | [rules/compatibility.md](rules/compatibility.md) |
-
-### 資料存取
-| 需求 | 檔案 |
-|------|------|
 | GetField / GetQuote / GetSymbolField 語法 | [rules/data-access.md](rules/data-access.md) |
 | 欄位字串精確匹配 + 單位後綴 | [rules/field-naming.md](rules/field-naming.md) |
 | 技術可行性預審流程 | [rules/feasibility-check.md](rules/feasibility-check.md) |
 
-### 查函數（Grep 搜尋 `functions/`）
+### 查函數
 | 類別 | 檔案 |
 |------|------|
 | 一般/數學/交易/日期/字串/欄位/時間/陣列 | `functions/builtin/*.md` |
 | 技術指標/價格/跨頻率/邏輯/趨勢/期權 | `functions/system/*.md` |
 
-### 查欄位名稱（Grep 搜尋 `fields/`）
-| 類別 | 檔案 |
-|------|------|
-| 報價欄位 (132) | `fields/quote/*.md` |
-| 資料欄位 (371) | `fields/data/*.md` |
-| 選股欄位 (508) | `fields/selection/*.md` |
+### 查欄位（優先用白名單）
+| 方式 | 路徑 | 說明 |
+|------|------|------|
+| **白名單（首選）** | `fields/all-fields.txt` | 1,011 個欄位，1 次 Read 即可比對全部 |
+| 分類詳情 | `fields/quote/*.md` `fields/data/*.md` `fields/selection/*.md` | 需要查看欄位的支援商品、備註時使用 |
+| xs-helper 完整文件 | `~/.cache/xs-helper/xs-helper backup/` | 白名單找不到時的最終確認 |
 
 ### 常用模式與陷阱
 | 模式 | 檔案 |
@@ -66,7 +60,7 @@ argument-hint: [XS 腳本需求描述，例如：寫一個 RSI 指標腳本、�
 | GROUP 語法 | [patterns/group-syntax.md](patterns/group-syntax.md) |
 | 常見錯誤表 | [patterns/common-pitfalls.md](patterns/common-pitfalls.md) |
 
-### 範例程式碼（按類型查閱）
+### 範例程式碼
 | 類型 | 檔案 |
 |------|------|
 | 指標腳本 | `examples/indicator/*.md` |
@@ -83,50 +77,11 @@ argument-hint: [XS 腳本需求描述，例如：寫一個 RSI 指標腳本、�
 
 ---
 
-## 搜尋策略
-
-### 1. 快速查詢（Skill 內部索引）
-```
-Grep pattern="函數或欄位名稱" path="~/.claude/skills/xs-writer/functions/"
-Grep pattern="欄位名稱" path="~/.claude/skills/xs-writer/fields/"
-```
-
-### 2. 詳細文件查詢（xs-helper GitHub 快取）
-xs-helper 來源：https://github.com/mophyfei/xs-helper
-本地快取：`~/.cache/xs-helper/xs-helper backup/`
-
-```
-# 若快取不存在，先執行同步
-Bash "bash ~/.claude/skills/xs-writer/sync.sh"
-
-# 搜尋完整的函數/欄位文件
-Grep pattern="欄位名稱" path="~/.cache/xs-helper/xs-helper backup/"
-Glob pattern="**/函數名稱.md" path="~/.cache/xs-helper/xs-helper backup/"
-```
-
-### 3. 搜尋順序
-1. 先查 Skill 精簡索引 → 速度快、token 少
-2. 不確定時查 xs-helper 快取 → 完整詳細文件
-3. 欄位名稱**永遠**要比對參考文件，不可憑記憶
-
----
-
 ## 自學習規則
 
-### 錯誤記錄
-當用戶回報 XS 程式碼錯誤時：
-1. 先修正程式碼
-2. 將錯誤模式追加到 [learned/error-patterns.md](learned/error-patterns.md)
-3. 格式：`### YYYY-MM-DD: 錯誤標題` + 錯誤/原因/修正
-
-### 欄位修正
-欄位名稱寫錯時，記錄到 [learned/field-corrections.md](learned/field-corrections.md)
-
-### 用戶技巧
-用戶說「記住這個」或分享注意事項時，記錄到 [learned/user-tips.md](learned/user-tips.md)
-
-### 撰寫前檢查
-撰寫新程式碼前，先讀取 `learned/error-patterns.md` 檢查是否有相關已知陷阱。
+- 用戶回報錯誤 → 修正後追加到 [learned/error-patterns.md](learned/error-patterns.md)
+- 欄位名稱寫錯 → 記錄到 [learned/field-corrections.md](learned/field-corrections.md)
+- 用戶說「記住這個」→ 記錄到 [learned/user-tips.md](learned/user-tips.md)
 
 ---
 
@@ -139,74 +94,30 @@ Glob pattern="**/函數名稱.md" path="~/.cache/xs-helper/xs-helper backup/"
 
 ---
 
-## 自動審查流程（撰寫完成後必須執行）
+## 自動審查流程（撰寫完成後執行）
 
-撰寫完 XS 程式碼後，**必須**逐項執行以下審查，全部通過才能回傳給用戶。
-若任一項不通過，**先修正再重新審查**，直到全部通過為止。
+撰寫完 XS 程式碼後，執行以下 2 步審查，全部通過才能交付。
 
-### Step 1：語法合規性審查
-- [ ] **純 XS 語法**：逐行檢查，確認每個關鍵字、函數都是 XS 原生語法
-- [ ] **禁止項目清單**：未使用 `==`、`!=`、`++`、`--`、`+=`、`def`、`function`、`return`（XS 用 `ret`）、`print`（XS 用 `Print`）、`elif`、`else if`（XS 用 `else`）、`switch/case`、`try/catch`、`null/None/nil`、`true/false`（XS 用 `True/False`）、`MarketPosition`、`EntryPrice`、`LastBarOnChart`
-- [ ] **函數存在性**：每個使用到的函數，在 `functions/`、xs-helper 快取、或 `learned/error-patterns.md` 中確認存在且用法正確
-
-### Step 2：命名與格式審查
-- [ ] 所有 `input` / `var` 名稱以 `_` 開頭
+### Step 1：語法 + 命名審查（腦內執行，無需 tool call）
+- [ ] 未使用非 XS 語法（`==`、`!=`、`++`、`def`、`return`、`print`、`elif`、`switch/case`、`try/catch`、`null`、`true/false`、`MarketPosition`、`EntryPrice`、`LastBarOnChart`）
+- [ ] 所有 `input`/`var` 名稱以 `_` 開頭
 - [ ] `plot` 與 `PlotK` 未混用
-- [ ] `InputKind` 預設值與 Dict 型別匹配
+- [ ] 交易腳本：`IntPortion` 轉張數、`intrabarpersist` 狀態變數、`FilledAtBroker`/`FilledAvgPrice`
+- [ ] 警示腳本：未用 `OutputField`；選股腳本：未用 `GetQuote`
 
-### Step 3：資料存取審查（強制比對 xs-helper）
-- [ ] **逐一比對**：將程式碼中每個 `GetField`/`GetQuote` 的欄位字串，用 Grep 在 `fields/` 目錄中搜尋，確認**完全匹配**（不可部分匹配或近似匹配）
-- [ ] **禁止自創**：若搜尋不到，該欄位名稱就是錯的。必須在 `fields/` 中找到正確名稱後修正
-- [ ] 目標商品在欄位支援範圍內
-- [ ] 腳本頻率符合系統限制
-- [ ] 未在選股腳本中使用分鐘頻率 `GetField`
+### Step 2：欄位白名單比對（1 次 Read）
+1. **Read** `fields/all-fields.txt`（1 次 tool call）
+2. 將程式碼中每個 `GetField`/`GetQuote` 的欄位名，在白名單中確認存在
+3. 若有欄位不在白名單中 → **修正後才能交付**
 
-### Step 4：腳本類型專屬審查
-- [ ] 交易腳本：金額轉張數用 `IntPortion`，以 1000 股為單位
-- [ ] 交易腳本：狀態變數用 `intrabarpersist`
-- [ ] 交易腳本：取庫存用 `FilledAtBroker`，取成本用 `FilledAvgPrice`（禁止 `EntryPrice`）
-- [ ] 交易腳本：`Print` 輸出到檔案必須用 `Print(File("路徑"), ...)`，`File()` 不可存入變數
-- [ ] 警示腳本：未使用 `OutputField`（選股專用）
-- [ ] 選股腳本：未使用 `GetQuote`（警示/交易專用）
-
-### Step 5：已知陷阱比對
-- [ ] 比對 `learned/error-patterns.md` 中的所有已知錯誤，確認未踩坑
-
-### 審查結果輸出
-審查全部通過後，在程式碼下方附上：
-```
-✓ 審查通過：語法合規 / 命名規範 / 資料存取 / 類型限制 / 已知陷阱
-```
-若有修正，說明修正了什麼。
+### 審查結果
+通過後附上：`✓ 審查通過：語法合規 / 命名規範 / 欄位白名單比對`
 
 ---
 
-## 使用指引（程式碼交付後必須告知用戶）
+## 使用指引（交付後告知用戶）
 
-程式碼審查通過並交付給用戶後，**必須**附上以下使用步驟指引：
+詳見 [rules/usage-guide.md](rules/usage-guide.md)。交付程式碼時附上簡短版：
 
-### Step 1：匯入 XQ
-
-1. 複製上方的 XS 程式碼
-2. 打開 **XQ 全球贏家**
-3. 點選上方選單 **「策略 (D)」** → **「XScript 編輯器 (E)」**
-4. 在編輯器中，新增一個腳本（類型選擇對應的腳本類別）
-5. 將程式碼貼上
-
-### Step 2：編譯
-
-按下 **F6** 或點選工具列上的 **「編譯」** 按鈕。
-
-- **編譯成功** → 進入 Step 3 開始使用
-- **編譯失敗** → 請將錯誤訊息貼回來，我幫你修正
-
-### Step 3：開始使用
-
-根據腳本類別，點選編輯器工具列上對應的按鈕：
-
-| 腳本類別 | 操作 |
-|----------|------|
-| **指標腳本** | 點選 **「加入指標」**，即可在技術分析圖上顯示 |
-| **選股腳本** | 點選 **「加入選股」**，即可在選股中心使用 |
-| **警示腳本** | 點選 **「加入雷達」**，即可在智慧雷達中監控 |
-| **交易腳本** | 點選 **「加入自動交易」**，即可設定自動下單策略 |
+> **使用方式**：XQ → 策略(D) → XScript 編輯器(E) → 新增腳本 → 貼上程式碼 → F6 編譯
+> 編譯失敗請將錯誤訊息貼回來，我幫你修正。
